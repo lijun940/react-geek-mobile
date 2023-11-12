@@ -1,25 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React, { memo } from 'react'
+import { BrowserRouter as Router, Route, Switch, Redirect, Link } from 'react-router-dom'
+const Login = React.lazy(() => import( '@/pages/Login'))
+const Home = React.lazy(() => import( '@/pages/Home'))
+export default memo(function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
-export default App;
+      <Router>
+        <div className='app'>
+          <Switch>
+            <Redirect from='/' exact to='/login'></Redirect>
+            <Route path='/login' component={Login}></Route>
+            <Route path='/home' component={Home}></Route>
+          </Switch>
+        </div>
+      </Router>
+  )
+})
