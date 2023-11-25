@@ -1,13 +1,7 @@
+import login from "./login.js";
 const { combineReducers } = require("redux");
-function test(state = 0, action) {
-  return state
-}
-function use(state = {nameL:'zs'},action) {
-  return state
-}
 const reducer = combineReducers({
-  test,
-  use
-})
+  login,
+});
 
-export default reducer
+export default reducer;
