@@ -1,23 +1,23 @@
-import React, { memo } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-  Link,
-} from "react-router-dom";
-const Login = React.lazy(() => import("@/pages/Login"));
-const Home = React.lazy(() => import("@/pages/Layout"));
+import React, { memo } from 'react'
+import { Router, Route, Switch, Redirect, Link } from 'react-router-dom'
+import { history } from './utils/history'
+import AuthRoute from './components/AuthRoute'
+const Login = React.lazy(() => import('@/pages/Login'))
+const Home = React.lazy(() => import('@/pages/Layout'))
+const ProfileEdit = React.lazy(() => import('@/pages/Profile/Edit'))
+const ProfileChat = React.lazy(() => import('@/pages/Profile/Chat'))
 export default memo(function App() {
   return (
-    <Router>
+    <Router history={history}>
       <div className="app">
         <Switch>
           <Redirect from="/" exact to="/login"></Redirect>
           <Route path="/login" component={Login}></Route>
           <Route path="/home" component={Home}></Route>
+          <AuthRoute path="/profile/edit" component={ProfileEdit}></AuthRoute>
+          <AuthRoute path="/profile/chat" component={ProfileChat}></AuthRoute>
         </Switch>
       </div>
     </Router>
-  );
-});
+  )
+})

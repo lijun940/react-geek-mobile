@@ -1,64 +1,67 @@
-import NavBar from "@/components/NavBar";
-import React, { memo, useRef, useState } from "react";
-import styles from "./index.module.scss";
-import Input from "@/components/Input";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import classNames from "classnames";
-import { useDispatch } from "react-redux";
-import { login, sendCode } from "@/store/actions/login";
-import { Toast } from "antd-mobile";
-import { useHistory } from "react-router-dom";
+import NavBar from '@/components/NavBar'
+import React, { memo, useRef, useState } from 'react'
+import styles from './index.module.scss'
+import Input from '@/components/Input'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import classNames from 'classnames'
+import { useDispatch } from 'react-redux'
+import { login, sendCode } from '@/store/actions/login'
+import { Toast } from 'antd-mobile'
+import { useHistory } from 'react-router-dom'
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
 export default memo(function Login(props) {
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const [time, setTime] = useState(0);
-  const ref = useRef(null);
-  let timer;
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const [time, setTime] = useState(0)
+  const ref = useRef(null)
+  const location = useLocation()
+  let timer
   const onExtraClick = async () => {
     if (time > 0) {
-      return;
+      return
     }
     const res = await formik.setTouched({
       mobile: true,
-    });
+    })
     if (res.mobile) {
-      return;
+      return
     }
-    await dispatch(sendCode(mobile));
-    Toast.success("获取验证码成功", 1);
+    await dispatch(sendCode(mobile))
+    Toast.success('获取验证码成功', 1)
     // 开启倒计时
-    setTime(60);
+    setTime(60)
     timer = setInterval(() => {
       setTime((time) => {
-        ref.current = time - 1;
-        return time - 1;
-      });
+        ref.current = time - 1
+        return time - 1
+      })
       if (ref.current === 0) {
-        clearInterval(timer);
+        clearInterval(timer)
       }
-    }, 1000);
-  };
+    }, 1000)
+  }
 
   const formik = useFormik({
     initialValues: {
-      mobile: "15988127765",
-      code: "246810",
+      mobile: '15988127765',
+      code: '246810',
     },
     async onSubmit(values) {
-      await dispatch(login(values));
-      Toast.success("登录成功");
-      history.push("/home");
+      await dispatch(login(values))
+      Toast.success('登录成功')
+      const pathname = location.state ? location.state.from : '/home'
+      history.replace(pathname)
     },
     validationSchema: Yup.object({
       mobile: Yup.string()
-        .required("手机号不能为空")
-        .matches(/^1[3-9]\d{9}$/, "手机号格式错误"),
+        .required('手机号不能为空')
+        .matches(/^1[3-9]\d{9}$/, '手机号格式错误'),
       code: Yup.string()
-        .required("验证码不能为空")
-        .matches(/^\d{6}$/, "验证码格式错误"),
+        .required('验证码不能为空')
+        .matches(/^\d{6}$/, '验证码格式错误'),
     }),
-  });
+  })
   const {
     values: { mobile, code },
     handleChange,
@@ -67,7 +70,7 @@ export default memo(function Login(props) {
     handleBlur,
     touched,
     isValid,
-  } = formik;
+  } = formik
   return (
     <div className={styles.root}>
       {/* 顶部工具栏 */}
@@ -94,7 +97,7 @@ export default memo(function Login(props) {
               autoComplete="off"
               name="code"
               placeholder="请输入验证码"
-              extra={time === 0 ? "获取验证码" : `${time}秒后`}
+              extra={time === 0 ? '获取验证码' : `${time}秒后`}
               onExtraClick={onExtraClick}
               value={code}
               onChange={handleChange}
@@ -107,7 +110,7 @@ export default memo(function Login(props) {
           </div>
           <button
             type="submit"
-            className={classNames("login-btn", { disabled: !isValid })}
+            className={classNames('login-btn', { disabled: !isValid })}
             disabled={!isValid}
           >
             登录
@@ -115,5 +118,5 @@ export default memo(function Login(props) {
         </form>
       </div>
     </div>
-  );
-});
+  )
+})
